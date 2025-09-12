@@ -2,7 +2,10 @@ import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
 
-const printGrid = (actives, cycle) => {
+const printGrid = (actives, cycle = 0) => {
+  actives = _.keys(actives).map((key) =>
+    key.split(',').map((i) => parseInt(i))
+  );
   const [minX] = _.minBy(actives, (a) => a[0]);
   const [, minY] = _.minBy(actives, (a) => a[1]);
   const [, , minZ] = _.minBy(actives, (a) => a[2]);
@@ -10,7 +13,7 @@ const printGrid = (actives, cycle) => {
   const [, maxY] = _.maxBy(actives, (a) => a[1]);
   const [, , maxZ] = _.maxBy(actives, (a) => a[2]);
 
-  console.log(`After ${cycle} cycles:`);
+  console.log(`\nAfter ${cycle} cycles:\n`);
   for (let z = minZ; z <= maxZ; z++) {
     console.log(`z=${z}`);
     for (let y = minY; y <= maxY; y++) {
@@ -23,7 +26,6 @@ const printGrid = (actives, cycle) => {
             return _.isEqual(active, pos);
           })
         ) {
-          // console.log(pos);
           s += '#';
         } else s += '.';
       }
@@ -41,6 +43,7 @@ const puzzle1 = (lines) => {
       if (cube === '#') actives[[x, y, 0]] = true;
     });
   });
+  // printGrid(actives);
 
   // 6 cycles
   _.range(1, 7).forEach((i) => {
@@ -68,6 +71,7 @@ const puzzle1 = (lines) => {
     });
 
     actives = newActives;
+    // printGrid(actives, i);
   });
 
   return _.size(actives);

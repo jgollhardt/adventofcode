@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../../utils/fetch.js';
 
-//
+// 5585
 const puzzle1 = (lines) => {
   const map = {};
   for (const [[x1, y1], [x2, y2]] of lines) {
@@ -22,7 +22,7 @@ const puzzle1 = (lines) => {
   return _.sumBy(Object.values(map), (count) => count >= 2);
 };
 
-//
+// 17193
 const puzzle2 = (lines) => {
   const map = {};
   for (const [[x1, y1], [x2, y2]] of lines) {

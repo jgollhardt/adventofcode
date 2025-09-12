@@ -12,14 +12,13 @@ const puzzle1 = (lines) => {
     .map((bus) => parseInt(bus));
 
   let starting = buses.map((bus) => {
-    let tmp = bus;
-    while (tmp < earliest) tmp += bus;
-    return { bus, tmp };
+    let departure = bus;
+    while (departure < earliest) departure += bus;
+    return { bus, departure };
   });
 
-  const min = _.minBy(starting, 'tmp');
-
-  return (min.tmp - earliest) * min.bus;
+  const minBus = _.minBy(starting, 'departure');
+  return (minBus.departure - earliest) * minBus.bus;
 };
 
 // 225850756401039
@@ -34,23 +33,18 @@ const puzzle2 = (lines) => {
     }
   });
 
-  let alephBus = buses[0];
-  for (let i = 1; i < buses.length; i++) {
-    const { bus, index } = buses[i];
-    let x = alephBus.index;
-    let newBus;
-    while (!newBus) {
-      if ((x + index) % bus === 0) {
-        newBus = { bus: alephBus.bus * bus, index: x };
-        break;
+  let period = 1;
+  return _.reduce(
+    buses,
+    (offset, { bus, index }) => {
+      while ((offset + index) % bus) {
+        offset += period;
       }
-      x += alephBus.bus;
-    }
-
-    alephBus = newBus;
-  }
-
-  return alephBus.index;
+      period *= bus;
+      return offset;
+    },
+    0
+  );
 };
 
 await fetchInput();

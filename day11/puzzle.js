@@ -78,6 +78,7 @@ const puzzle2 = (seats) => {
 
     seats = newSeats;
   }
+
   // Return number of filled seats
   return _.sumBy(seats, (row) => _.sumBy(row, (seat) => seat === '#'));
 };

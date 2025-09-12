@@ -2,6 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
 
+// 700
 const puzzle1 = (lines, target = 2020) => {
   let nums = [...lines[0].split(',').map((x) => parseInt(x))];
   const seen = new Map();
@@ -24,6 +25,7 @@ const puzzle1 = (lines, target = 2020) => {
   return nextNum;
 };
 
+// 51358
 const puzzle2 = (lines) => {
   return puzzle1(lines, 30000000);
 };

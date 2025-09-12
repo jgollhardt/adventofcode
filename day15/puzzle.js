@@ -4,16 +4,15 @@ import { fetchInput } from '../utils/fetch.js';
 
 const puzzle1 = (lines, target = 2020) => {
   let nums = [...lines[0].split(',').map((x) => parseInt(x))];
-  const seen = {};
+  const seen = new Map();
   nums.forEach((num, i) => {
-    seen[num] = i;
+    seen.set(num, i);
   });
 
   let nextNum = 0;
   for (let i = nums.length; i < target - 1; i++) {
-    if (i % 1000000 === 0) console.timeLog('puzzle2', `Reached ${i}`);
-    const lastSeen = seen[nextNum];
-    seen[nextNum] = i;
+    const lastSeen = seen.get(nextNum);
+    seen.set(nextNum, i);
 
     if (nextNum >= 0 && lastSeen >= 0) {
       nextNum = i - lastSeen;
@@ -35,6 +34,4 @@ await fetchInput();
 const data = fs.readFileSync('input.txt', 'utf-8');
 const lines = data.trim().split('\n');
 console.log(puzzle1(lines));
-console.time('puzzle2');
 console.log(puzzle2(lines));
-console.timeEnd('puzzle2');

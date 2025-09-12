@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { userInfo } from 'os';
 import { fetchInput } from '../utils/fetch.js';
 
 // 842

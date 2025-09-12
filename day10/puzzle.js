@@ -17,31 +17,24 @@ const puzzle1 = (lines) => {
   return result_1 * result_3;
 };
 
+const numCombinations = (adapters, num, cache = {}) => {
+  const possibleChildren = _.range(num + 1, num + 4);
+  const foundAdapters = _.filter(possibleChildren, (x) => adapters.has(x));
+
+  if (foundAdapters.length === 0) return 1;
+
+  if (cache[num]) return cache[num];
+
+  const count = _.sumBy(foundAdapters, (adapter) =>
+    numCombinations(adapters, adapter, cache)
+  );
+  cache[num] = count;
+  return count;
+};
+
 // 1973822685184
 const puzzle2 = (lines) => {
-  lines = _.sortBy(lines);
-
-  let chainLengths = [];
-  let length = 1;
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i] - (lines[i - 1] ?? 0) !== 1) {
-      chainLengths.push(length);
-      length = 1;
-    } else {
-      length++;
-    }
-  }
-  chainLengths.push(length);
-
-  // chain of 3 => 2 branches
-  // chain of 4 => 4 branches
-  // chain of 5 => 7 branches
-  return chainLengths.reduce((acc, chainLength) => {
-    if (chainLength === 3) acc *= 2;
-    if (chainLength === 4) acc *= 4;
-    if (chainLength === 5) acc *= 7;
-    return acc;
-  }, 1);
+  return numCombinations(new Set(lines), 0);
 };
 
 await fetchInput();

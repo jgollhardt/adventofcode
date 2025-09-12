@@ -1,5 +1,5 @@
-import fs from "fs";
-import { fetchInput } from "../utils/fetch.js";
+import fs from 'fs';
+import { fetchInput } from '../utils/fetch.js';
 
 // 434
 const puzzle1 = (lines) => {
@@ -29,14 +29,14 @@ const puzzle2 = (lines) => {
 await fetchInput();
 
 // const data = fs.readFileSync('test_input1.txt', 'utf-8')
-const data = fs.readFileSync("input.txt", "utf-8");
+const data = fs.readFileSync('input.txt', 'utf-8');
 const lines = data
   .trim()
-  .split("\n")
+  .split('\n')
   .map((line) => {
-    const parts = line.split(" ");
+    const parts = line.split(' ');
     return [
-      ...parts[0].split("-").map((part) => parseInt(part)),
+      ...parts[0].split('-').map((part) => parseInt(part)),
       parts[1][0],
       parts[2],
     ];

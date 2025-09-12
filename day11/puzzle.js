@@ -4,30 +4,29 @@ import { fetchInput } from '../utils/fetch.js';
 
 const printSeats = (seats) => {
   console.log(seats.map((row) => row.join('')).join('\n'));
+  console.log();
 };
 
 // 2126
 const puzzle1 = (seats) => {
   while (true) {
-    const newSeats = _.cloneDeep(seats);
-    _.forEach(seats, (row, i) => {
-      _.forEach(row, (seat, j) => {
-        let numOccupied = 0;
-        _.range(-1, 2).forEach((di) => {
-          _.range(-1, 2).forEach((dj) => {
+    const newSeats = _.map(seats, (row, i) => {
+      return _.map(row, (seat, j) => {
+        const dirs = [-1, 0, 1];
+        const numOccupied = _.sumBy(dirs, (di) => {
+          return _.sumBy(dirs, (dj) => {
             if (di === 0 && dj === 0) return;
-            if (seats[i + di] && seats[i + di][j + dj] === '#') {
-              numOccupied++;
-            }
+            return seats[i + di] && seats[i + di][j + dj] === '#';
           });
         });
 
         if (seat === 'L' && numOccupied === 0) {
-          newSeats[i][j] = '#';
+          return '#';
         }
         if (seat === '#' && numOccupied >= 4) {
-          newSeats[i][j] = 'L';
+          return 'L';
         }
+        return seat;
       });
     });
 
@@ -45,14 +44,12 @@ const puzzle1 = (seats) => {
 // 1914
 const puzzle2 = (seats) => {
   while (true) {
-    const newSeats = _.cloneDeep(seats);
-    _.forEach(seats, (row, i) => {
-      _.forEach(row, (seat, j) => {
-        let numOccupied = 0;
-        _.range(-1, 2).forEach((di) => {
-          _.range(-1, 2).forEach((dj) => {
+    const newSeats = _.map(seats, (row, i) => {
+      return _.map(row, (seat, j) => {
+        const dirs = [-1, 0, 1];
+        const numOccupied = _.sumBy(dirs, (di) => {
+          return _.sumBy(dirs, (dj) => {
             if (di === 0 && dj === 0) return;
-
             let newI = i + di;
             let newJ = j + dj;
             let newSeat = seats[newI] && seats[newI][newJ];
@@ -61,19 +58,17 @@ const puzzle2 = (seats) => {
               newJ += dj;
               newSeat = seats[newI] && seats[newI][newJ];
             }
-
-            if (newSeat === '#') {
-              numOccupied++;
-            }
+            return newSeat === '#';
           });
         });
 
         if (seat === 'L' && numOccupied === 0) {
-          newSeats[i][j] = '#';
+          return '#';
         }
         if (seat === '#' && numOccupied >= 5) {
-          newSeats[i][j] = 'L';
+          return 'L';
         }
+        return seat;
       });
     });
 
@@ -83,7 +78,6 @@ const puzzle2 = (seats) => {
 
     seats = newSeats;
   }
-
   // Return number of filled seats
   return _.sumBy(seats, (row) => _.sumBy(row, (seat) => seat === '#'));
 };

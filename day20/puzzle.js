@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
-import { pathToFileURL } from 'url';
 
+// 111936085519519
 const puzzle1 = (lines) => {
   const tiles = {};
 
@@ -10,23 +10,6 @@ const puzzle1 = (lines) => {
     const [id, ...rest] = tile.split('\n');
     tiles[id.slice(-5, -1)] = rest;
   });
-
-  // looking for 2 to 4 adjacents
-  // can calculate the numbers we're looking for based on the number of tiles
-  // (sqrt(size) - 1) ** 2 need 4
-  // 4 need two
-  // 4 * sqrt(size) - 8 need 3
-  // const twos = 4;
-  // const threes = 4 * Math.sqrt(_.size(tiles)) - 8;
-  // const fours = Math.round(Math.pow(Math.sqrt(_.size(tiles) - 1), 2));
-  // console.log(twos, threes, fours);
-
-  // const adjs = {};
-  // while (
-  //   _.sumBy(_.values(adjs), (adj) => adj.length) <
-  //   twos + threes + fours
-  // ) {
-  // }
 
   const adjs = {};
   _.forEach(tiles, (tile, id) => {
@@ -115,6 +98,7 @@ const permuteTile = (tile) => {
   return [...rotations, ...flips];
 };
 
+// 1792
 const puzzle2 = (lines) => {
   const tiles = {};
 

@@ -14,4 +14,4 @@ await fetchInput();
 const data = fs.readFileSync('input.txt', 'utf-8');
 const lines = data.trim().split('\n') // .map(line => parseInt(line));
 console.log(puzzle1(lines));
-// console.log(puzzle2(lines));
+console.log(puzzle2(lines));

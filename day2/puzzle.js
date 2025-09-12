@@ -35,5 +35,5 @@ const lines = data.trim().split('\n')
     return [...parts[0].split('-').map(part => parseInt(part)), parts[1][0], parts[2]];
   });
 // .map(line => parseInt(line));
-// console.log(puzzle1(lines));
+console.log(puzzle1(lines));
 console.log(puzzle2(lines));

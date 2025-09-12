@@ -41,6 +41,5 @@ const lines = data
       parts[2],
     ];
   });
-// .map(line => parseInt(line));
 console.log(puzzle1(lines));
 console.log(puzzle2(lines));

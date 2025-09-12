@@ -2,15 +2,25 @@ import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
 
-// not 37
-const puzzle1 = (lines) => {
+const parseInstructions = (data) => {
+  return data
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [op, num] = line.split(' ');
+      return {
+        op,
+        num: parseInt(num),
+      };
+    });
+};
+
+const runProgram = (program) => {
   let acc = 0;
-  const seen = new Set();
   let lineNumber = 0;
-  let op;
-  let num;
-  while (!seen.has(lineNumber)) {
-    ({ op, num, lineNumber } = lines[lineNumber]);
+  const seen = new Set();
+  while (!seen.has(lineNumber) && lineNumber < program.length) {
+    let { op, num } = program[lineNumber];
     seen.add(lineNumber);
 
     switch (op) {
@@ -27,60 +37,33 @@ const puzzle1 = (lines) => {
     }
   }
 
-  return acc;
+  return { acc, finite: lineNumber >= program.length };
 };
 
-const puzzle2 = (lines) => {
-  let acc;
-  lines.some((_, index) => {
-    acc = 0;
-    const seen = new Set();
-    let lineNumber = 0;
-    let op;
-    let num;
-    while (!seen.has(lineNumber)) {
-      ({ op, num, lineNumber } = lines[lineNumber]);
-      seen.add(lineNumber);
+// 1801
+const puzzle1 = (program) => {
+  return runProgram(program).acc;
+};
 
-      if (lineNumber === index) {
-        if (op === 'nop') op = 'jmp';
-        else if (op === 'jmp') op = 'nop';
-      }
-
-      switch (op) {
-        case 'acc':
-          lineNumber += 1;
-          acc += num;
-          break;
-        case 'jmp':
-          lineNumber += num;
-          break;
-        case 'nop':
-          lineNumber += 1;
-          break;
-      }
-
-      if (lineNumber === lines.length) return true;
+// 2060
+const puzzle2 = (program) => {
+  const modifiedPrograms = _.transform(
+    program,
+    (result, { op, num }, index) => {
+      if (op === 'acc') return;
+      const newProgram = [...program];
+      newProgram[index] = { op: op === 'nop' ? 'jmp' : 'nop', num };
+      result.push(newProgram);
     }
-  });
+  );
 
-  return acc;
+  return _(modifiedPrograms).map(runProgram).filter('finite').first().acc;
 };
 
 await fetchInput();
 
 // const data = fs.readFileSync('test_input1.txt', 'utf-8');
 const data = fs.readFileSync('input.txt', 'utf-8');
-const lines = data
-  .trim()
-  .split('\n')
-  .map((line, index) => {
-    const [op, num] = line.split(' ');
-    return {
-      op,
-      num: parseInt(num),
-      lineNumber: index,
-    };
-  });
-console.log(puzzle1(lines));
-console.log(puzzle2(lines));
+const program = parseInstructions(data);
+console.log(puzzle1(program));
+console.log(puzzle2(program));

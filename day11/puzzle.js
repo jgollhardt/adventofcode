@@ -3,159 +3,98 @@ import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
 
 const printSeats = (seats) => {
-  const minX = Math.min(
-    ...Object.keys(seats).map((seat) => seat.split(',')[0])
-  );
-  const maxX = Math.max(
-    ...Object.keys(seats).map((seat) => seat.split(',')[0])
-  );
-  const minY = Math.min(
-    ...Object.keys(seats).map((seat) => seat.split(',')[1])
-  );
-  const maxY = Math.max(
-    ...Object.keys(seats).map((seat) => seat.split(',')[1])
-  );
-  // console.log(minX, maxX, minY, maxY);
-  for (let x = minX; x <= maxX; x++) {
-    let string = '';
-    for (let y = minY; y <= maxY; y++) {
-      string += seats[[x, y]] || '.';
-    }
-    console.log(string);
-  }
-  console.log();
+  console.log(seats.map((row) => row.join('')).join('\n'));
 };
 
 // 2126
-const puzzle1 = (lines) => {
-  let seats = {};
-  for (let i = 0; i < lines.length; i++) {
-    for (let j = 0; j < lines[i].length; j++) {
-      if (lines[i][j] === 'L') {
-        seats[[i, j]] = 'L';
-      }
-    }
-  }
-  // printSeats(seats);
-
-  const seen = [];
-  let count = 0;
-  while (!_.some(seen, seats)) {
-    // console.log(seats);
-    // if (count === 5) break;
-
-    seen.push(seats);
-    const newSeats = { ...seats };
-    _.forEach(seats, (val, key) => {
-      let [i, j] = key.split(',');
-      i = parseInt(i);
-      j = parseInt(j);
-
-      let occs = 0;
-      _.range(-1, 2).forEach((di) => {
-        _.range(-1, 2).forEach((dj) => {
-          if (di === 0 && dj === 0) return;
-
-          if (seats[[i + di, j + dj]] === '#') {
-            occs++;
-          }
+const puzzle1 = (seats) => {
+  while (true) {
+    const newSeats = _.cloneDeep(seats);
+    _.forEach(seats, (row, i) => {
+      _.forEach(row, (seat, j) => {
+        let numOccupied = 0;
+        _.range(-1, 2).forEach((di) => {
+          _.range(-1, 2).forEach((dj) => {
+            if (di === 0 && dj === 0) return;
+            if (seats[i + di] && seats[i + di][j + dj] === '#') {
+              numOccupied++;
+            }
+          });
         });
+
+        if (seat === 'L' && numOccupied === 0) {
+          newSeats[i][j] = '#';
+        }
+        if (seat === '#' && numOccupied >= 4) {
+          newSeats[i][j] = 'L';
+        }
       });
-
-      // console.log(occs);
-
-      if (val === 'L' && occs === 0) {
-        newSeats[key] = '#';
-      } else if (val === '#' && occs >= 4) {
-        newSeats[key] = 'L';
-      }
     });
 
-    seats = newSeats;
-    // printSeats(seats);
+    // printSeats(newSeats);
 
-    count++;
+    if (_.isEqual(seats, newSeats)) break;
+
+    seats = newSeats;
   }
 
   // Return number of filled seats
-  let result = 0;
-  _.forEach(seats, (seat) => {
-    if (seat === '#') result++;
-  });
-  return result;
+  return _.sumBy(seats, (row) => _.sumBy(row, (seat) => seat === '#'));
 };
 
-const puzzle2 = (lines) => {
-  let seats = {};
-  for (let i = 0; i < lines.length; i++) {
-    for (let j = 0; j < lines[i].length; j++) {
-      if (lines[i][j] === 'L') {
-        seats[[i, j]] = 'L';
-      } else {
-        seats[[i, j]] = '.';
-      }
-    }
-  }
-  // printSeats(seats);
+// 1914
+const puzzle2 = (seats) => {
+  while (true) {
+    const newSeats = _.cloneDeep(seats);
+    _.forEach(seats, (row, i) => {
+      _.forEach(row, (seat, j) => {
+        let numOccupied = 0;
+        _.range(-1, 2).forEach((di) => {
+          _.range(-1, 2).forEach((dj) => {
+            if (di === 0 && dj === 0) return;
 
-  const seen = [];
-  let count = 0;
-  while (!_.some(seen, seats)) {
-    seen.push(seats);
-    const newSeats = { ...seats };
-    _.forEach(seats, (val, key) => {
-      let [i, j] = key.split(',');
-      i = parseInt(i);
-      j = parseInt(j);
-
-      let occs = 0;
-      _.range(-1, 2).forEach((di) => {
-        _.range(-1, 2).forEach((dj) => {
-          if (di === 0 && dj === 0) return;
-
-          let newI = i + di;
-          let newJ = j + dj;
-          while (seats[[newI, newJ]]) {
-            if (seats[[newI, newJ]] === '.') {
+            let newI = i + di;
+            let newJ = j + dj;
+            let newSeat = seats[newI] && seats[newI][newJ];
+            while (newSeat === '.') {
               newI += di;
               newJ += dj;
+              newSeat = seats[newI] && seats[newI][newJ];
             }
-            if (seats[[newI, newJ]] === '#') {
-              occs++;
-              break;
+
+            if (newSeat === '#') {
+              numOccupied++;
             }
-            if (seats[[newI, newJ]] === 'L') break;
-          }
+          });
         });
+
+        if (seat === 'L' && numOccupied === 0) {
+          newSeats[i][j] = '#';
+        }
+        if (seat === '#' && numOccupied >= 5) {
+          newSeats[i][j] = 'L';
+        }
       });
-
-      // console.log(occs);
-
-      if (val === 'L' && occs === 0) {
-        newSeats[key] = '#';
-      } else if (val === '#' && occs >= 5) {
-        newSeats[key] = 'L';
-      }
     });
 
-    seats = newSeats;
-    // printSeats(seats);
+    // printSeats(newSeats);
 
-    count++;
+    if (_.isEqual(seats, newSeats)) break;
+
+    seats = newSeats;
   }
 
   // Return number of filled seats
-  let result = 0;
-  _.forEach(seats, (seat) => {
-    if (seat === '#') result++;
-  });
-  return result;
+  return _.sumBy(seats, (row) => _.sumBy(row, (seat) => seat === '#'));
 };
 
 await fetchInput();
 
 // const data = fs.readFileSync('test_input1.txt', 'utf-8');
 const data = fs.readFileSync('input.txt', 'utf-8');
-const lines = data.trim().split('\n');
+const lines = data
+  .trim()
+  .split('\n')
+  .map((line) => line.split(''));
 console.log(puzzle1(lines));
 console.log(puzzle2(lines));

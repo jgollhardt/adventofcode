@@ -17,7 +17,10 @@ const puzzle1 = (lines) => {
     if (d === 'E') x += dist;
     if (d === 'W') x -= dist;
 
-    if (d === 'L') direction = (direction - dist / 90 + 4) % 4;
+    if (d === 'L') {
+      direction -= dist / 90;
+      while (direction < 0) direction += 4;
+    }
     if (d === 'R') direction = (direction + dist / 90) % 4;
   }
 

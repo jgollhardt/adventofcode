@@ -1,14 +1,18 @@
 import fs from 'fs';
 import { fetchInput } from '../utils/fetch.js';
 
+// 1005459
 const puzzle1 = (lines) => {
-  for (let i = 0; i < lines.length - 2; i++) {
-    for (let j = i + 1; j < lines.length - 1; j++) {
-      if (lines[i] + lines[j] === 2020) return lines[i] * lines[j];
+  const linesSet = new Set(lines);
+  for (const line of lines) {
+    const diff = 2020 - line;
+    if (linesSet.has(diff)) {
+      return line * diff;
     }
   }
 }
 
+// 92643264
 const puzzle2 = (lines) => {
   for (let i = 0; i < lines.length - 2; i++) {
     for (let j = i + 1; j < lines.length - 1; j++) {

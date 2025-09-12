@@ -18,8 +18,8 @@ const puzzle2 = (lines) => {
   const slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]];
   slopes.forEach(([dx, dy]) => {
     let count = 0;
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[dy * i] && lines[dy * i][dx * i % lines[i].length] === '#') {
+    for (let i = 0; dy * i < lines.length; i++) {
+      if (lines[dy * i][dx * i % lines[i].length] === '#') {
         count++;
       }
     }

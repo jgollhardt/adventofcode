@@ -12,15 +12,8 @@ const puzzle1 = (lines: typeof dataLines) => {
         for (let x = -1; x <= 1; x++) {
           for (let y = -1; y <= 1; y++) {
             if (x === 0 && y === 0) continue;
-            if (
-              i + x < 0 ||
-              j + y < 0 ||
-              i + x >= lines.length ||
-              j + y >= lines[0].length
-            )
-              continue;
 
-            if (lines[i + x][j + y] === '@') {
+            if (lines[i + x] && lines[i + x][j + y] === '@') {
               count++;
             }
           }
@@ -47,15 +40,8 @@ const puzzle2 = (lines: typeof dataLines) => {
           for (let x = -1; x <= 1; x++) {
             for (let y = -1; y <= 1; y++) {
               if (x === 0 && y === 0) continue;
-              if (
-                i + x < 0 ||
-                j + y < 0 ||
-                i + x >= lines.length ||
-                j + y >= lines[0].length
-              )
-                continue;
 
-              if (lines[i + x][j + y] === '@') {
+              if (lines[i + x] && lines[i + x][j + y] === '@') {
                 count++;
               }
             }

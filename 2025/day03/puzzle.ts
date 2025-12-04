@@ -3,7 +3,7 @@ import fs from 'fs';
 import { fetchInput } from '../../utils/fetch.js';
 
 // 17359
-const puzzle1 = (lines) => {
+const puzzle1 = (lines: typeof dataLines) => {
   let result = 0;
   lines.map((line) => {
     for (let num = 9; num > 0; num--) {
@@ -31,7 +31,7 @@ const puzzle1 = (lines) => {
 };
 
 // 172787336861064
-const puzzle2 = (lines) => {
+const puzzle2 = (lines: typeof dataLines) => {
   let result = 0;
   lines.map((line) => {
     let remaining = line;
@@ -58,11 +58,11 @@ await fetchInput();
 
 // const data = fs.readFileSync('test_input.txt', 'utf-8');
 const data = fs.readFileSync('input.txt', 'utf-8');
-const lines = data
+const dataLines = data
   .trim()
   .split('\n')
   .map((line) => {
     return line;
   });
-console.log(puzzle1(lines));
-console.log(puzzle2(lines));
+console.log(puzzle1(dataLines));
+console.log(puzzle2(dataLines));

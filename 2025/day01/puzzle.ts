@@ -3,7 +3,7 @@ import fs from 'fs';
 import { fetchInput } from '../../utils/fetch.js';
 
 // 56
-const puzzle1 = (lines) => {
+const puzzle1 = (lines: typeof dataLines) => {
   let dial = 50;
   let result = 0;
   lines.map(([dir, n]) => {
@@ -20,7 +20,7 @@ const puzzle1 = (lines) => {
 };
 
 // 5887
-const puzzle2 = (lines) => {
+const puzzle2 = (lines: typeof dataLines) => {
   let dial = 50;
   let result = 0;
   lines.map(([dir, n]) => {
@@ -50,11 +50,11 @@ await fetchInput();
 
 // const data = fs.readFileSync('test_input.txt', 'utf-8');
 const data = fs.readFileSync('input.txt', 'utf-8');
-const lines = data
+const dataLines = data
   .trim()
   .split('\n')
   .map((line) => {
-    return [line.slice(0, 1), parseInt(line.slice(1))];
+    return [line.slice(0, 1), parseInt(line.slice(1))] as const;
   });
-console.log(puzzle1(lines));
-console.log(puzzle2(lines));
+console.log(puzzle1(dataLines));
+console.log(puzzle2(dataLines));

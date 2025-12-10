@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import fs from 'fs';
 import { fetchInput } from '../../utils/fetch.js';
 
